@@ -1,0 +1,596 @@
+
+[
+  {
+    "id": "p-pomodoro",
+    "slug": "pomodoro-technique",
+    "title": "Técnica Pomodoro",
+    "description": "Ciclos de 25 minutos de foco intenso seguidos por 5 minutos de descanso. Ideal para tarefas repetitivas ou longas.",
+    "mechanism": "Previne a fadiga cognitiva impondo pausas regulares e reduz a resistência límbica ao iniciar tarefas (a tarefa parece menor).",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Gestão de Tempo", "Iniciante"],
+    "goal": "Aumentar output de trabalho e reduzir procrastinação.",
+    "recommended_metrics": ["Ciclos Completos", "Nível de Fadiga (1-10)", "Distrações Internas"],
+    "contraindications": ["Tarefas criativas profundas que exigem 'Flow' > 60min"],
+    "steps": [
+      { "order": 1, "title": "Defina a Tarefa", "description": "Escolha UMA única tarefa.", "is_mandatory": true },
+      { "order": 2, "title": "Timer 25m", "description": "Configure o timer para 25 minutos.", "is_mandatory": true },
+      { "order": 3, "title": "Trabalhe", "description": "Trabalhe até o alarme tocar. Anote distrações se ocorrerem.", "is_mandatory": true },
+      { "order": 4, "title": "Pausa Curta", "description": "Pausa de 5 min (sem telas).", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "The effect of time management training", "author": "Häfner, A.", "year": 2014 }
+    ]
+  },
+  {
+    "id": "p-deep-work",
+    "slug": "deep-work-blocks",
+    "title": "Blocos de Deep Work",
+    "description": "Sessões de 90 minutos de trabalho cognitivo ininterrupto, alinhadas aos ritmos ultradianos.",
+    "mechanism": "Alinha o esforço cognitivo com os ciclos ultradianos naturais do cérebro (aprox. 90 min) para maximizar neuroquímica de foco.",
+    "evidence_level": "SILVER",
+    "duration_days": 14,
+    "tags": ["Pack: Foco", "Avançado", "Cognição"],
+    "goal": "Maximizar output cognitivo de alta qualidade.",
+    "recommended_metrics": ["Horas de Foco Profundo", "Clareza Mental (1-10)", "Progresso da Tarefa"],
+    "contraindications": ["Iniciantes com baixo controle de atenção"],
+    "steps": [
+      { "order": 1, "title": "Elimine Distrações", "description": "Celular em outro cômodo, notificações off.", "is_mandatory": true },
+      { "order": 2, "title": "Timer 90m", "description": "Foque em uma tarefa complexa por 90 minutos.", "is_mandatory": true },
+      { "order": 3, "title": "Descanso Ativo", "description": "20 minutos de descompressão total após o bloco.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-nsdr",
+    "slug": "nsdr-yoga-nidra",
+    "title": "NSDR / Yoga Nidra",
+    "description": "Descanso Profundo Sem Sono. Protocolo de 20 minutos para resetar o sistema nervoso.",
+    "mechanism": "Facilita a neuroplasticidade e repõe dopamina engajando o sistema nervoso parassimpático e ondas cerebrais Theta.",
+    "evidence_level": "GOLD",
+    "duration_days": 14,
+    "tags": ["Pack: Sono", "Pack: Stress", "Recuperação"],
+    "goal": "Recuperar energia mental e melhorar sono.",
+    "recommended_metrics": ["Energia Pós-Prática", "Qualidade do Sono", "Ansiedade Noturna"],
+    "contraindications": ["Ao dirigir ou operar máquinas"],
+    "steps": [
+      { "order": 1, "title": "Deite-se", "description": "Encontre um local silencioso e deite-se de costas.", "is_mandatory": true },
+      { "order": 2, "title": "Áudio Guia", "description": "Ouça um script de NSDR ou Yoga Nidra (YouTube/Apps).", "is_mandatory": true },
+      { "order": 3, "title": "Body Scan", "description": "Siga as instruções de relaxamento progressivo.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "Yoga Nidra as a complementary treatment of anxiety", "author": "Ferreira-Vorkapic C.", "year": 2018 }
+    ]
+  },
+  {
+    "id": "p-morning-sun",
+    "slug": "morning-sunlight",
+    "title": "Exposição Solar Matinal",
+    "description": "Visualizar luz solar direta (ao ar livre) nos primeiros 30-60 minutos após acordar.",
+    "mechanism": "O pulso de luz na retina dispara o núcleo supraquiasmático para liberar cortisol (acordar) e agendar melatonina para 16h depois.",
+    "evidence_level": "GOLD",
+    "duration_days": 14,
+    "tags": ["Pack: Sono", "Pack: Hábitos", "Energia"],
+    "goal": "Regular ciclo circadiano e melhorar humor.",
+    "recommended_metrics": ["Latência do Sono", "Nível de Alerta Manhã", "Humor"],
+    "contraindications": ["Não olhar diretamente para o sol (segurança ocular)"],
+    "steps": [
+      { "order": 1, "title": "Sair de Casa", "description": "Vá para fora. Janelas filtram o espectro azul necessário.", "is_mandatory": true },
+      { "order": 2, "title": "Exposição", "description": "5-10 min (dia claro) ou 20 min (nublado).", "is_mandatory": true },
+      { "order": 3, "title": "Sem Óculos Escuros", "description": "Se possível, remova óculos escuros (grau ok).", "is_mandatory": false }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-physio-sigh",
+    "slug": "physiological-sigh",
+    "title": "Suspiro Fisiológico",
+    "description": "Padrão de respiração: duas inspirações pelo nariz e uma expiração longa pela boca.",
+    "mechanism": "Reabre os alvéolos pulmonares colapsados e remove CO2 rapidamente, ativando o nervo vago para calma imediata.",
+    "evidence_level": "GOLD",
+    "duration_days": 7,
+    "tags": ["Pack: Stress", "Quick", "Ansiedade"],
+    "goal": "Redução aguda de stress em tempo real.",
+    "recommended_metrics": ["Ansiedade Aguda (1-10)", "Frequência Cardíaca"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Inale Duas Vezes", "description": "Uma inalação profunda pelo nariz, seguida de uma curta para encher pulmões.", "is_mandatory": true },
+      { "order": 2, "title": "Exale Longamente", "description": "Solte o ar pela boca devagar até esvaziar tudo.", "is_mandatory": true },
+      { "order": 3, "title": "Repita", "description": "Faça 1 a 3 ciclos.", "is_mandatory": true }
+    ],
+    "citations": [
+       { "title": "Brief structured respiration practices enhance mood and reduce physiological arousal", "author": "Balban, Huberman et al.", "year": 2023 }
+    ]
+  },
+  {
+    "id": "p-cold-shower",
+    "slug": "cold-exposure",
+    "title": "Banho Gelado Matinal",
+    "description": "1 a 3 minutos de água fria ao final do banho.",
+    "mechanism": "Aumenta norepinefrina e dopamina (até 250%) por horas. Gera resiliência mental via controle top-down.",
+    "evidence_level": "GOLD",
+    "duration_days": 14,
+    "tags": ["Pack: Foco", "Pack: Hábitos", "Dopamina"],
+    "goal": "Aumentar baseline de dopamina e energia.",
+    "recommended_metrics": ["Energia", "Humor", "Tempo de Exposição"],
+    "contraindications": ["Problemas cardíacos", "Gravidez"],
+    "steps": [
+      { "order": 1, "title": "Banho Normal", "description": "Tome seu banho higiênico morno.", "is_mandatory": false },
+      { "order": 2, "title": "Choque Frio", "description": "Vire tudo para o frio. Entre de uma vez.", "is_mandatory": true },
+      { "order": 3, "title": "Controle", "description": "Respire devagar. Fique 60 segundos.", "is_mandatory": true }
+    ],
+    "citations": [
+        { "title": "Human physiological responses to immersion into water of different temperatures", "author": "Srámek P.", "year": 2000 }
+    ]
+  },
+  {
+    "id": "p-caffeine-cutoff",
+    "slug": "caffeine-cutoff",
+    "title": "Cutoff de Cafeína (10h)",
+    "description": "Parar a ingestão de cafeína 10 horas antes do horário de dormir.",
+    "mechanism": "A meia-vida da cafeína é de 5-6 horas. Ingestão tardia bloqueia receptores de adenosina, prejudicando o sono profundo.",
+    "evidence_level": "GOLD",
+    "duration_days": 10,
+    "tags": ["Pack: Sono", "Pack: Hábitos"],
+    "goal": "Melhorar a arquitetura do sono (SWS e REM).",
+    "recommended_metrics": ["Qualidade do Sono", "Facilidade em Adormecer"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Defina o Horário", "description": "Se dorme às 23h, pare às 13h.", "is_mandatory": true },
+      { "order": 2, "title": "Substituição", "description": "Troque por descafeinado ou chá de ervas após o horário.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-box-breathing",
+    "slug": "box-breathing",
+    "title": "Respiração Quadrada",
+    "description": "Inspira 4s, Segura 4s, Exala 4s, Segura 4s. Usado por militares para controle emocional.",
+    "mechanism": "Regula o CO2 e ativa o parassimpático através do ritmo lento e retenção.",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Stress", "Foco"],
+    "goal": "Estabilização emocional pré-tarefa.",
+    "recommended_metrics": ["Calma (1-10)", "Clareza Mental"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Inspire", "description": "4 segundos pelo nariz.", "is_mandatory": true },
+      { "order": 2, "title": "Segure", "description": "4 segundos pulmão cheio.", "is_mandatory": true },
+      { "order": 3, "title": "Exale", "description": "4 segundos pela boca/nariz.", "is_mandatory": true },
+      { "order": 4, "title": "Segure", "description": "4 segundos pulmão vazio.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-dopamine-detox",
+    "slug": "dopamine-detox-lite",
+    "title": "Jejum de Dopamina (Lite)",
+    "description": "Remoção de estímulos super-normais (redes sociais, jogos, junk food) por 24h ou períodos específicos.",
+    "mechanism": "Ressensibiliza os receptores de dopamina, tornando atividades difíceis mais prazerosas.",
+    "evidence_level": "BRONZE",
+    "duration_days": 3,
+    "tags": ["Pack: Hábitos", "Avançado"],
+    "goal": "Restaurar motivação para tarefas difíceis.",
+    "recommended_metrics": ["Tédio (1-10)", "Impulso de Checar Celular", "Motivação"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Defina as Regras", "description": "Sem redes sociais, sem streaming, sem açúcar.", "is_mandatory": true },
+      { "order": 2, "title": "Substitua", "description": "Use o tempo para caminhar, escrever ou limpar.", "is_mandatory": true },
+      { "order": 3, "title": "Observe", "description": "Note o tédio sem reagir a ele.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-gratitude",
+    "slug": "gratitude-journaling",
+    "title": "Diário de Gratidão",
+    "description": "Escrever 3 coisas pelas quais é grato toda manhã ou noite.",
+    "mechanism": "Altera o viés atencional do cérebro para positivo, reduzindo ruminação e cortisol.",
+    "evidence_level": "GOLD",
+    "duration_days": 21,
+    "tags": ["Pack: Stress", "Pack: Hábitos", "Bem-estar"],
+    "goal": "Melhorar satisfação com a vida e reduzir stress.",
+    "recommended_metrics": ["Humor Diário", "Nível de Stress"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Escolha o Momento", "description": "Logo ao acordar ou antes de dormir.", "is_mandatory": true },
+      { "order": 2, "title": "Escreva", "description": "3 itens. Seja específico (não apenas 'família', mas 'o café com minha mãe').", "is_mandatory": true },
+      { "order": 3, "title": "Sinta", "description": "Tente reviver a emoção por 10 segundos.", "is_mandatory": true }
+    ],
+    "citations": [
+       { "title": "Counting blessings versus burdens", "author": "Emmons & McCullough", "year": 2003 }
+    ]
+  },
+  {
+    "id": "p-binaural-40hz",
+    "slug": "binaural-beats-40hz",
+    "title": "Batidas Binaurais 40Hz",
+    "description": "Ouvir frequências auditivas específicas para induzir ondas gama.",
+    "mechanism": "Arrastamento de ondas cerebrais (brainwave entrainment) para frequências associadas a foco e cognição.",
+    "evidence_level": "BRONZE",
+    "duration_days": 5,
+    "tags": ["Pack: Foco", "Áudio"],
+    "goal": "Aumentar concentração durante tarefas.",
+    "recommended_metrics": ["Foco (1-10)", "Duração da Sessão"],
+    "contraindications": ["Epilepsia (consultar médico)"],
+    "steps": [
+      { "order": 1, "title": "Fones de Ouvido", "description": "Necessário fones estéreo (esq/dir diferentes).", "is_mandatory": true },
+      { "order": 2, "title": "Play", "description": "Busque '40Hz Binaural Beats' no Spotify/YouTube.", "is_mandatory": true },
+      { "order": 3, "title": "Trabalhe", "description": "Use durante o bloco de trabalho.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-sleep-temp",
+    "slug": "sleep-temperature",
+    "title": "Ambiente Frio para Sono",
+    "description": "Manter o quarto entre 18°C e 20°C.",
+    "mechanism": "O corpo precisa reduzir a temperatura central em ~1°C para iniciar e manter o sono profundo.",
+    "evidence_level": "GOLD",
+    "duration_days": 7,
+    "tags": ["Pack: Sono"],
+    "goal": "Facilitar início do sono e reduzir despertares.",
+    "recommended_metrics": ["Despertares Noturnos", "Qualidade do Sono"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Ajuste AC/Ventilador", "description": "Configure para ~19°C.", "is_mandatory": true },
+      { "order": 2, "title": "Cobertores", "description": "Use cobertores para conforto, mas mantenha o ar frio.", "is_mandatory": false }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-creatine",
+    "slug": "creatine-cognitive",
+    "title": "Creatina (Uso Cognitivo)",
+    "description": "Suplementação de 5g de Creatina Monohidratada diariamente.",
+    "mechanism": "Aumenta estoques de fosfocreatina no cérebro, melhorando reciclagem de ATP durante tarefas cognitivas exigentes.",
+    "evidence_level": "GOLD",
+    "duration_days": 21,
+    "tags": ["Pack: Hábitos", "Suplementação", "Cérebro"],
+    "goal": "Reduzir fadiga mental e melhorar memória de trabalho.",
+    "recommended_metrics": ["Fadiga Mental Vespertina", "Clareza de Raciocínio"],
+    "contraindications": ["Doença renal pré-existente (consultar médico)"],
+    "steps": [
+      { "order": 1, "title": "Dose Diária", "description": "Tome 5g de creatina monohidratada.", "is_mandatory": true },
+      { "order": 2, "title": "Consistência", "description": "Tome todo dia, mesmo sem treino.", "is_mandatory": true },
+      { "order": 3, "title": "Hidratação", "description": "Aumente ingestão de água.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "Effects of creatine supplementation on cognitive function of healthy individuals", "author": "Avgerinos et al.", "year": 2018 }
+    ]
+  },
+  {
+    "id": "p-phone-gray",
+    "slug": "phone-grayscale",
+    "title": "Celular em Escala de Cinza",
+    "description": "Configurar a tela do smartphone para preto e branco.",
+    "mechanism": "Remove as recompensas visuais (cores vibrantes) que estimulam o sistema de dopamina, reduzindo o vício em checagem.",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Pack: Hábitos", "Digital"],
+    "goal": "Reduzir tempo de tela (Screen Time).",
+    "recommended_metrics": ["Tempo de Tela Diário", "Checagens Involuntárias"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Configurar", "description": "Acessibilidade > Tela > Filtros de Cor > Escala de Cinza.", "is_mandatory": true },
+      { "order": 2, "title": "Atalho", "description": "Crie um atalho (3 cliques) para desativar se precisar ver fotos.", "is_mandatory": false },
+      { "order": 3, "title": "Manter", "description": "Mantenha ativo 90% do dia.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-478-breath",
+    "slug": "478-breathing",
+    "title": "Respiração 4-7-8",
+    "description": "Técnica rítmica para induzir sono.",
+    "mechanism": "Modulação vagal potente através da expiração prolongada (8s).",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Sono", "Ansiedade"],
+    "goal": "Adormecer mais rápido.",
+    "recommended_metrics": ["Latência do Sono", "Relaxamento Pré-sono"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Inspire 4s", "description": "Pelo nariz silenciosamente.", "is_mandatory": true },
+      { "order": 2, "title": "Segure 7s", "description": "Sem tensão.", "is_mandatory": true },
+      { "order": 3, "title": "Exale 8s", "description": "Pela boca com som de 'whoosh'.", "is_mandatory": true },
+      { "order": 4, "title": "Repita", "description": "4 ciclos no total.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-zone2",
+    "slug": "zone-2-cardio",
+    "title": "Cardio Zona 2",
+    "description": "Exercício aeróbico de baixa intensidade (consegue falar, mas ofegante) por 30-45 min.",
+    "mechanism": "Melhora função mitocondrial e flexibilidade metabólica, base para energia estável ao longo do dia.",
+    "evidence_level": "GOLD",
+    "duration_days": 21,
+    "tags": ["Pack: Hábitos", "Saúde", "Energia"],
+    "goal": "Aumentar base aeróbica e saúde mitocondrial.",
+    "recommended_metrics": ["Energia Diária", "Frequência Cardíaca Repouso"],
+    "contraindications": ["Lesões ortopédicas"],
+    "steps": [
+      { "order": 1, "title": "Escolha Atividade", "description": "Caminhada rápida, bike, trote leve.", "is_mandatory": true },
+      { "order": 2, "title": "Intensidade", "description": "Mantenha-se num ritmo onde consegue conversar, mas prefere não.", "is_mandatory": true },
+      { "order": 3, "title": "Duração", "description": "Mínimo 30 minutos.", "is_mandatory": true }
+    ],
+    "citations": [
+       { "title": "Zone 2 training for metabolic health", "author": "San Millán, I.", "year": 2020 }
+    ]
+  },
+  {
+    "id": "p-write-worry",
+    "slug": "worry-dump",
+    "title": "Download de Preocupações",
+    "description": "Escrever todas as tarefas e preocupações abertas em um papel antes de dormir ou iniciar trabalho.",
+    "mechanism": "Descarrega a Memória de Trabalho, reduzindo a carga cognitiva e ansiedade de fundo ('Loop Aberto').",
+    "evidence_level": "SILVER",
+    "duration_days": 5,
+    "tags": ["Pack: Stress", "Pack: Foco"],
+    "goal": "Reduzir ruminação mental.",
+    "recommended_metrics": ["Clareza Mental", "Tempo para Adormecer"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Pegue Papel", "description": "Melhor que digital para este fim.", "is_mandatory": false },
+      { "order": 2, "title": "Liste Tudo", "description": "Tudo que está pendente na sua cabeça. Não organize, apenas liste.", "is_mandatory": true },
+      { "order": 3, "title": "Ação", "description": "Defina o próximo passo de cada item ou risque.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "The effects of expressive writing on working memory", "author": "Baikie & Wilhelm", "year": 2005 }
+    ]
+  },
+  {
+    "id": "p-forest-bath",
+    "slug": "forest-bathing",
+    "title": "Banho de Floresta (Shinrin-yoku)",
+    "description": "Imersão em ambiente natural por 20+ minutos.",
+    "mechanism": "Reduz cortisol e pressão arterial. Fitoncidas das árvores aumentam atividade das células NK (imunidade).",
+    "evidence_level": "GOLD",
+    "duration_days": 7,
+    "tags": ["Pack: Stress", "Recuperação"],
+    "goal": "Redução profunda de stress.",
+    "recommended_metrics": ["Nível de Relaxamento", "Humor"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Natureza", "description": "Vá a um parque ou floresta.", "is_mandatory": true },
+      { "order": 2, "title": "Desconecte", "description": "Sem celular. Sem música.", "is_mandatory": true },
+      { "order": 3, "title": "Sentidos", "description": "Foque no cheiro, som e visual das árvores.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "Physiological effects of Shinrin-yoku", "author": "Park BJ et al.", "year": 2010 }
+    ]
+  },
+  {
+    "id": "p-visualize",
+    "slug": "visualization",
+    "title": "Visualização de Processo",
+    "description": "Imaginar vividamente a EXECUÇÃO de uma tarefa (não o resultado final).",
+    "mechanism": "Ativa áreas motoras e de planejamento do cérebro, reduzindo atrito e ansiedade de performance.",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Performance"],
+    "goal": "Melhorar preparação e execução de tarefas difíceis.",
+    "recommended_metrics": ["Ansiedade Pré-tarefa", "Qualidade da Execução"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Relaxe", "description": "Feche os olhos por 1 min.", "is_mandatory": true },
+      { "order": 2, "title": "Imagine o Agir", "description": "Imagine-se começando a tarefa, lidando com problemas e persistindo.", "is_mandatory": true },
+      { "order": 3, "title": "Não foque no prêmio", "description": "Foque no esforço e ação.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-eat-frog",
+    "slug": "eat-the-frog",
+    "title": "Eat the Frog",
+    "description": "Fazer a tarefa mais difícil/temida logo no início do dia.",
+    "mechanism": "Aproveita o pico de cortisol matinal e evita o 'efeito Zeigarnik' (ansiedade de tarefa pendente) ao longo do dia.",
+    "evidence_level": "BRONZE",
+    "duration_days": 5,
+    "tags": ["Pack: Foco", "Gestão de Tempo"],
+    "goal": "Vencer a procrastinação.",
+    "recommended_metrics": ["Satisfação Diária", "Nível de Stress Tarde"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Identifique o Sapo", "description": "Qual a tarefa que você está evitando?", "is_mandatory": true },
+      { "order": 2, "title": "Faça Antes de Tudo", "description": "Antes de checar email ou Slack.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "Eat That Frog!", "author": "Brian Tracy", "year": 2001 }
+    ]
+  },
+  {
+    "id": "p-intermittent-fasting",
+    "slug": "intermittent-fasting-16-8",
+    "title": "Jejum Intermitente 16:8",
+    "description": "Restringir a janela de alimentação a 8 horas por dia (ex: 12h às 20h).",
+    "mechanism": "Melhora sensibilidade à insulina e aumenta orexina/catecolaminas pela manhã, promovendo alerta.",
+    "evidence_level": "SILVER",
+    "duration_days": 14,
+    "tags": ["Pack: Hábitos", "Saúde", "Foco"],
+    "goal": "Estabilidade de energia e clareza mental.",
+    "recommended_metrics": ["Fome Matinal", "Foco Manhã", "Peso"],
+    "contraindications": ["Transtornos alimentares", "Diabetes (monitorar)"],
+    "steps": [
+      { "order": 1, "title": "Pule o Café", "description": "Apenas água, café preto ou chá sem açúcar de manhã.", "is_mandatory": true },
+      { "order": 2, "title": "Primeira Refeição", "description": "Almoce às 12h ou 13h.", "is_mandatory": true },
+      { "order": 3, "title": "Última Refeição", "description": "Jante até as 20h ou 21h.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-blue-block",
+    "slug": "blue-light-blocking",
+    "title": "Bloqueio de Luz Azul",
+    "description": "Usar óculos bloqueadores de luz azul ou software (f.lux) após o pôr do sol.",
+    "mechanism": "A luz azul suprime a melatonina. Bloqueá-la permite o início natural da sonolência.",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Sono"],
+    "goal": "Adormecer mais rápido.",
+    "recommended_metrics": ["Sonolência 22h", "Latência do Sono"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Software", "description": "Instale f.lux ou ative 'Night Shift' em telas.", "is_mandatory": true },
+      { "order": 2, "title": "Óculos", "description": "Use óculos ambar/vermelhos após as 20h.", "is_mandatory": false },
+      { "order": 3, "title": "Luzes da Casa", "description": "Apague luzes de teto (brancas). Use abajur.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-power-nap",
+    "slug": "power-nap",
+    "title": "Power Nap (Sesta)",
+    "description": "Cochilo de 10 a 20 minutos entre 13h e 15h.",
+    "mechanism": "Limpa adenosina residual sem entrar em sono profundo (inércia do sono).",
+    "evidence_level": "GOLD",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Recuperação"],
+    "goal": "Restaurar alerta para a tarde.",
+    "recommended_metrics": ["Alerta Tarde", "Humor"],
+    "contraindications": ["Insônia noturna (pode atrapalhar sono da noite)"],
+    "steps": [
+      { "order": 1, "title": "Timing", "description": "Antes das 15h.", "is_mandatory": true },
+      { "order": 2, "title": "Alarme", "description": "Max 20 minutos.", "is_mandatory": true },
+      { "order": 3, "title": "Nappuccino (Opcional)", "description": "Tome café imediatamente antes. A cafeína bate ao acordar.", "is_mandatory": false }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-cold-environment-work",
+    "slug": "cool-workspace",
+    "title": "Ambiente de Trabalho Fresco",
+    "description": "Trabalhar em temperatura levemente fria (19-21°C).",
+    "mechanism": "O calor induz relaxamento/sonolência. O frio leve mantém o estado de alerta.",
+    "evidence_level": "BRONZE",
+    "duration_days": 5,
+    "tags": ["Pack: Foco", "Ambiente"],
+    "goal": "Evitar sonolência durante trabalho.",
+    "recommended_metrics": ["Nível de Alerta", "Conforto Térmico"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Ajuste Temperatura", "description": "Reduza o termostato ou abra janela.", "is_mandatory": true },
+      { "order": 2, "title": "Agasalho Leve", "description": "Vista-se para não tremer, apenas sentir o frescor.", "is_mandatory": false }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-magnesium",
+    "slug": "magnesium-glycinate",
+    "title": "Magnésio (Glicinato/Treonato)",
+    "description": "Suplementação de Magnésio antes de dormir.",
+    "mechanism": "Magnésio é cofator para síntese de GABA (relaxamento) e regulação de neurotransmissores.",
+    "evidence_level": "SILVER",
+    "duration_days": 14,
+    "tags": ["Pack: Sono", "Suplementação"],
+    "goal": "Relaxamento muscular e sono profundo.",
+    "recommended_metrics": ["Relaxamento Físico", "Qualidade do Sono"],
+    "contraindications": ["Problemas renais/cardíacos (consultar médico)"],
+    "steps": [
+      { "order": 1, "title": "Escolha o Tipo", "description": "Glicinato (corpo) ou Treonato (cérebro). Evite óxido (laxativo).", "is_mandatory": true },
+      { "order": 2, "title": "Dose", "description": "200-400mg, 30-60 min antes de dormir.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-time-blocking",
+    "slug": "time-blocking",
+    "title": "Time Blocking",
+    "description": "Agendar cada minuto do dia em blocos dedicados.",
+    "mechanism": "Lei de Parkinson: o trabalho expande para preencher o tempo disponível. Blocos criam escassez artificial.",
+    "evidence_level": "SILVER",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Gestão de Tempo"],
+    "goal": "Aumentar eficiência e reduzir decisão sobre 'o que fazer'.",
+    "recommended_metrics": ["Tarefas Cumpridas", "Sensação de Controle"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Planeje a Noite Anterior", "description": "Defina os blocos do dia seguinte.", "is_mandatory": true },
+      { "order": 2, "title": "Blocos", "description": "Atribua tarefas específicas a horários específicos.", "is_mandatory": true },
+      { "order": 3, "title": "Buffer", "description": "Deixe blocos vazios para imprevistos.", "is_mandatory": true }
+    ],
+    "citations": [
+       { "title": "Deep Work", "author": "Cal Newport", "year": 2016 }
+    ]
+  },
+  {
+    "id": "p-social-media-fast",
+    "slug": "social-media-fast-morning",
+    "title": "Jejum de Redes (Manhã)",
+    "description": "Não checar redes sociais/notícias nas primeiras 2h do dia.",
+    "mechanism": "Preserva a dopamina para objetivos próprios em vez de reagir a demandas externas. Evita priming negativo.",
+    "evidence_level": "BRONZE",
+    "duration_days": 7,
+    "tags": ["Pack: Foco", "Pack: Hábitos"],
+    "goal": "Começar o dia proativo, não reativo.",
+    "recommended_metrics": ["Humor Matinal", "Foco na 1ª Tarefa"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Modo Avião", "description": "Deixe o celular em modo avião ou longe da cama ao dormir.", "is_mandatory": true },
+      { "order": 2, "title": "Rotina Matinal", "description": "Faça sua higiene e café sem telas.", "is_mandatory": true },
+      { "order": 3, "title": "Primeiro Check", "description": "Só após completar a primeira tarefa útil.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-sauna",
+    "slug": "sauna-session",
+    "title": "Sauna (Heat Stress)",
+    "description": "20 minutos de sauna (seca ou vapor) a 80°C+.",
+    "mechanism": "Libera Proteínas de Choque Térmico (HSP), dinorfina (sensibiliza dopamina) e hormônio do crescimento.",
+    "evidence_level": "GOLD",
+    "duration_days": 14,
+    "tags": ["Pack: Stress", "Recuperação", "Saúde"],
+    "goal": "Relaxamento profundo e saúde cardiovascular.",
+    "recommended_metrics": ["Relaxamento Pós-sauna", "Qualidade do Sono"],
+    "contraindications": ["Gravidez", "Pressão baixa", "Problemas cardíacos"],
+    "steps": [
+      { "order": 1, "title": "Hidratação", "description": "Beba 500ml de água antes.", "is_mandatory": true },
+      { "order": 2, "title": "Sessão", "description": "15 a 20 minutos.", "is_mandatory": true },
+      { "order": 3, "title": "Resfriamento", "description": "Deixe o corpo esfriar gradualmente ou tome ducha fria.", "is_mandatory": true }
+    ],
+    "citations": [
+      { "title": "Association between sauna bathing and fatal cardiovascular and all-cause mortality events", "author": "Laukkanen T.", "year": 2015 }
+    ]
+  },
+  {
+    "id": "p-five-minute-journal",
+    "slug": "five-minute-journal",
+    "title": "Diário de 5 Minutos",
+    "description": "Formato estruturado de journaling: Gratidão, O que faria hoje ótimo, e Afirmação.",
+    "mechanism": "Priming cognitivo para focar em intenções positivas e gratidão.",
+    "evidence_level": "BRONZE",
+    "duration_days": 14,
+    "tags": ["Pack: Hábitos", "Bem-estar"],
+    "goal": "Começar e terminar o dia com intenção.",
+    "recommended_metrics": ["Positividade", "Realização Diária"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Manhã", "description": "3 Gratidões, 3 Ações para hoje ser ótimo, 1 Afirmação.", "is_mandatory": true },
+      { "order": 2, "title": "Noite", "description": "3 Coisas incríveis que aconteceram, 1 Coisa que poderia ter sido melhor.", "is_mandatory": true }
+    ],
+    "citations": []
+  },
+  {
+    "id": "p-habit-stacking",
+    "slug": "habit-stacking",
+    "title": "Empilhamento de Hábitos",
+    "description": "Adicionar um novo hábito imediatamente após um hábito existente (O 'gancho').",
+    "mechanism": "Usa conexões neurais existentes (do hábito velho) para facilitar a criação de novas sinapses.",
+    "evidence_level": "SILVER",
+    "duration_days": 14,
+    "tags": ["Pack: Hábitos"],
+    "goal": "Implementar novos comportamentos sem depender de motivação.",
+    "recommended_metrics": ["Consistência (Dias)", "Esforço Percebido"],
+    "contraindications": [],
+    "steps": [
+      { "order": 1, "title": "Identifique o Gancho", "description": "Ex: 'Após escovar os dentes...'", "is_mandatory": true },
+      { "order": 2, "title": "Defina o Novo", "description": "...eu farei 2 minutos de meditação.", "is_mandatory": true },
+      { "order": 3, "title": "Execute", "description": "Imediatamente. Sem pausa.", "is_mandatory": true }
+    ],
+    "citations": [
+       { "title": "Atomic Habits", "author": "James Clear", "year": 2018 }
+    ]
+  }
+]

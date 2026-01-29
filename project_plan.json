@@ -1,0 +1,178 @@
+{
+  "product": {
+    "name": "Productivity Lab",
+    "one_liner": "The scientific productivity platform for measurable N=1 experiments.",
+    "target_users": [
+      "Biohackers (B2C)",
+      "Remote Workers (B2C)",
+      "High-Performance Teams (B2B)",
+      "HR & People Ops (B2B)"
+    ],
+    "core_value": "Transform scientific protocols into measurable personal and team experiments with transparent data.",
+    "north_star_metric": "Completed Valid Experiments per User"
+  },
+  "mvp_scope": {
+    "must_have": [
+      "Protocol Library with Evidence Levels & DOIs",
+      "Manual Data Logging (Focus Time, Sleep, Habits, Check-ins)",
+      "CSV Data Ingestion (Upload & Map fields)",
+      "Experiment Engine (Baseline -> Intervention -> Analysis)",
+      "Dashboard (Personal Trajectory)",
+      "Gemini AI Reports (Summarization & Insights)",
+      "Admin Panel (Manage Protocols)"
+    ],
+    "nice_to_have": [
+      "Calendar Integration (Google/Outlook)",
+      "Wearable API (Oura/Apple Health)",
+      "Team Leaderboards",
+      "Export PDF Reports"
+    ],
+    "out_of_scope": [
+      "Real-time Biometric Streaming",
+      "Native Mobile Apps (iOS/Android)",
+      "Marketplace for Coaches"
+    ]
+  },
+  "architecture": {
+    "stack_choice": "Next.js 14+ (App Router) + Tailwind + Shadcn/UI + Firebase + Gemini API",
+    "services": [
+      "Frontend: React/Next.js",
+      "Backend: Next.js API Routes / Firebase Functions",
+      "Database: Firestore (Flexible schema)",
+      "AI: Google Gemini (Text & Data Analysis)",
+      "Auth: Firebase Auth (Email/Google)"
+    ],
+    "deployment": "Vercel (Frontend/API) + Firebase (Data/Auth)"
+  },
+  "data_model": {
+    "entities": [
+      "User",
+      "Organization (B2B)",
+      "Protocol",
+      "Experiment",
+      "LogEntry",
+      "EvidenceSource"
+    ],
+    "tables_or_collections": [
+      "users",
+      "organizations",
+      "protocols",
+      "experiments",
+      "daily_logs",
+      "evidence_sources"
+    ]
+  },
+  "api": {
+    "endpoints": [
+      "POST /api/experiments/start",
+      "POST /api/logs/manual",
+      "POST /api/logs/upload_csv",
+      "GET /api/protocols",
+      "POST /api/ai/generate_report",
+      "POST /api/admin/protocols"
+    ]
+  },
+  "ai": {
+    "features": [
+      "Summarize Academic Papers (DOIs)",
+      "Classify Evidence Level (Gold/Silver/Bronze)",
+      "Generate N=1 Experiment Reports",
+      "Correlate CSV Data with Subjective Logs"
+    ],
+    "prompts": [
+      "Analyze Experiment: Compare baseline vs intervention stats.",
+      "Summarize Paper: Extract mechanism, sample size, and outcome.",
+      "Classify Evidence: Determine scientific consensus."
+    ],
+    "evaluation": [
+      "Accuracy of data extraction from CSV",
+      "User rating of insight helpfulness",
+      "Hallucination rate check on scientific claims"
+    ]
+  },
+  "security_lgpd": {
+    "principles": [
+      "Data Minimization",
+      "Purpose Limitation",
+      "Transparency"
+    ],
+    "controls": [
+      "Explicit Consent Checkboxes",
+      "Data Anonymization for AI processing",
+      "Audit Logs for Admin Actions",
+      "Data Export/Delete functionalities"
+    ]
+  },
+  "billing": {
+    "plans": [
+      "Free (Scientist): 1 Active Experiment, Manual Logs",
+      "Pro (Lab Director): Unlimited Experiments, CSV Upload, Advanced AI",
+      "Team (Enterprise): Aggregated Dashboards, SAML SSO, Priority Support"
+    ],
+    "entitlements": [
+      "experiment_limit",
+      "data_import_csv",
+      "ai_model_tier",
+      "team_analytics"
+    ]
+  },
+  "roadmap": {
+    "days_30": [
+      "MVP Release: Library, Manual Log, Basic Dashboard",
+      "CSV Upload Feature",
+      "Gemini AI Integration for Reports",
+      "Bilingual UI (EN/PT) Polish"
+    ],
+    "days_90": [
+      "Pro Plan Payment Integration (Stripe)",
+      "User Auth Implementation (Firebase)",
+      "Team/Organization Data Structure",
+      "Advanced Visualization (Correlations)"
+    ],
+    "days_180": [
+      "Wearable API Integrations",
+      "Enterprise Features (SSO, Audit Logs)",
+      "Public API for 3rd party tools",
+      "Mobile PWA optimization"
+    ]
+  },
+  "repo_plan": {
+    "file_tree": [
+      "apps/web/src/app/",
+      "apps/web/src/components/",
+      "apps/web/src/lib/",
+      "apps/web/src/services/",
+      "packages/ui/src/",
+      "packages/config/"
+    ],
+    "dependencies": [
+      "next",
+      "react",
+      "react-dom",
+      "lucide-react",
+      "recharts",
+      "@google/genai",
+      "firebase",
+      "papaparse"
+    ],
+    "env_vars": [
+      "NEXT_PUBLIC_GEMINI_API_KEY",
+      "NEXT_PUBLIC_FIREBASE_API_KEY",
+      "NEXT_PUBLIC_FIREBASE_PROJECT_ID"
+    ],
+    "commands": [
+      "npm run dev",
+      "npm run build",
+      "npm run test",
+      "npm run lint"
+    ]
+  },
+  "definition_of_done": [
+    "Feature implemented according to spec",
+    "Unit tests passed",
+    "UI is responsive and accessible",
+    "Localized in EN and PT",
+    "Data flow verified (Input -> DB -> AI -> UI)",
+    "Security checks passed (No exposed keys)"
+  ]
+}
