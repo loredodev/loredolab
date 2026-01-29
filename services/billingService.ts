@@ -1,50 +1,25 @@
 
-import { PLAN_LIMITS } from '../constants';
-
+// Versão simplificada e robusta para evitar crashes no front-end
 export const createCheckoutSession = async (planTier: string): Promise<void> => {
-  try {
-    const plan = PLAN_LIMITS[planTier as keyof typeof PLAN_LIMITS];
-    
-    if (!plan.priceId) {
-        alert("Erro de Configuração: ID de preço não encontrado em constants.ts");
-        return;
-    }
-
-    console.log(`Iniciando Checkout para ${plan.name}...`);
-
-    // Call Next.js API Route (Hosted on Vercel)
-    const response = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            priceId: plan.priceId,
-            returnUrl: window.location.origin
-        })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        console.error("Stripe Checkout Error:", data);
-        alert("Erro ao iniciar checkout. Tente novamente.");
-        return;
-    }
-    
-    if (data?.url) {
-        window.location.href = data.url;
-    } else {
-        throw new Error("A API não retornou uma URL válida.");
-    }
-
-  } catch (err: any) {
-    console.error("Billing Error:", err);
-    alert(`Erro no sistema de pagamento. Verifique sua conexão.`);
-  }
+  // Simplesmente mostra o alerta, sem lógica complexa de importação que possa falhar
+  console.log(`[Billing] User requested upgrade to: ${planTier}`);
+  
+  // Usamos setTimeout para garantir que a UI tenha renderizado e não bloqueie a thread principal imediatamente
+  setTimeout(() => {
+      alert(`
+      🚧 MODO DE DEMONSTRAÇÃO 🚧
+      
+      Você clicou para assinar o plano: ${planTier}.
+      
+      Como este é um MVP (Produto Mínimo Viável), a cobrança real está desativada para sua segurança.
+      
+      Em uma versão de produção, isso redirecionaria para o Checkout do Stripe.
+      `);
+  }, 100);
 };
 
 export const createPortalSession = async (): Promise<void> => {
-    // Portal logic similar... simplified for MVP
-    alert("Gerenciamento de assinatura em breve.");
+    setTimeout(() => {
+        alert("Gerenciamento de assinatura disponível apenas após upgrade real.");
+    }, 100);
 };

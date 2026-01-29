@@ -28,7 +28,7 @@ export const PLAN_LIMITS: Record<PlanTier, PlanConfig> = {
     id: 'PREMIUM',
     name: 'Lab Director',
     priceMonthly: 29.90, // Ajuste para o valor real que você criar no Stripe
-    priceId: 'price_1SuQHqREbvolxYWvfh7wl5Qp', 
+    priceId: 'price_SUBSTITUA_PELO_ID_DO_STRIPE_PREMIUM', 
     entitlements: {
       maxActiveExperiments: 3,
       maxMembers: 1,
@@ -45,7 +45,7 @@ export const PLAN_LIMITS: Record<PlanTier, PlanConfig> = {
     id: 'SUPER_PREMIUM',
     name: 'Chief Scientist',
     priceMonthly: 59.90, // Ajuste para o valor real
-    priceId: 'price_1SuQHqREbvolxYWvfh7wl5Qp',
+    priceId: 'price_SUBSTITUA_PELO_ID_DO_STRIPE_SUPER',
     entitlements: {
       maxActiveExperiments: 999,
       maxMembers: 5,

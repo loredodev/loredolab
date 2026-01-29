@@ -4,10 +4,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <!-- SECURITY NOTE: CSP relaxed to ensure application loads in all environments. -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
     
-    <!-- PWA Settings -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,7 +20,7 @@
           extend: {
             fontFamily: {
               sans: ['Plus Jakarta Sans', 'sans-serif'],
-              heading: ['Outfit', 'sans-serif'], // New font for Headings
+              heading: ['Outfit', 'sans-serif'],
             },
             colors: {
               lab: {
@@ -43,7 +41,7 @@
                 200: '#bae6fd',
                 300: '#7dd3fc',
                 400: '#38bdf8',
-                500: '#0ea5e9', // Sky Blue base
+                500: '#0ea5e9',
                 600: '#0284c7',
                 700: '#0369a1',
                 800: '#075985',
@@ -55,7 +53,7 @@
                 200: '#f5d0fe',
                 300: '#f0abfc',
                 400: '#e879f9',
-                500: '#d946ef', // Fuchsia Pop
+                500: '#d946ef',
                 600: '#c026d3',
                 700: '#a21caf',
                 800: '#86198f',
@@ -103,13 +101,13 @@
       body { font-family: 'Plus Jakarta Sans', sans-serif; }
       h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Outfit', sans-serif; }
       
-      /* Smooth Scrollbar */
+      /* SCROLLBAR */
       ::-webkit-scrollbar { width: 6px; height: 6px; }
       ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
       ::-webkit-scrollbar-thumb:hover { background: #64748b; }
       
-      /* Glassmorphism Utilities */
+      /* GLASS EFFECTS */
       .glass {
         background: rgba(255, 255, 255, 0.65);
         backdrop-filter: blur(12px);
@@ -122,6 +120,15 @@
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
+
+      /* CRITICAL COLOR FIXES */
+      /* Garante que qualquer elemento bg-white tenha texto escuro automaticamente */
+      .bg-white { color: #0f172a; }
+      .bg-slate-50 { color: #0f172a; }
+      .bg-lab-50 { color: #0f172a; }
+      
+      /* Garante que inputs tenham texto escuro */
+      input, select, textarea { color: #0f172a; }
     </style>
   <script type="importmap">
 {
@@ -136,14 +143,17 @@
     "papaparse": "https://esm.sh/papaparse@5.4.1",
     "dotenv": "https://esm.sh/dotenv@^17.2.3",
     "pg": "https://esm.sh/pg@^8.17.2",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.0"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-[#0F172A] text-slate-900 overflow-x-hidden selection:bg-blue-500 selection:text-white">
+  <!-- Alterado text-slate-900 para text-slate-200 para garantir legibilidade no fundo escuro -->
+  <body class="bg-[#0F172A] text-slate-200 overflow-x-hidden selection:bg-blue-500 selection:text-white">
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>
