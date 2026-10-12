@@ -1,0 +1,41 @@
+name: Leitor Loredo — gerar instaladores
+
+on:
+  push:
+    paths:
+      - 'leitor-livros/**'
+      - '.github/workflows/leitor-livros.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: --win
+            files: |
+              leitor-livros/dist/*.exe
+          - os: ubuntu-latest
+            target: --linux
+            files: |
+              leitor-livros/dist/*.AppImage
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: leitor-livros
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: leitor-livros/package-lock.json
+      - run: npm ci
+      - run: npx electron-builder ${{ matrix.target }} --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: leitor-loredo-${{ matrix.os }}
+          path: ${{ matrix.files }}
+          if-no-files-found: error
