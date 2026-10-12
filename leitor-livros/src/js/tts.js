@@ -24,7 +24,11 @@ export class ReadAloud extends EventTarget {
     #collect(doc) {
         const all = Array.from(doc.querySelectorAll(BLOCK))
         // apenas blocos "folha" (sem outros blocos dentro) e com texto
-        return all.filter(el => el.textContent.trim() && !el.querySelector(BLOCK))
+        const blocks = all.filter(el => el.textContent.trim() && !el.querySelector(BLOCK))
+        if (blocks.length) return blocks
+        // PDF: o texto fica em uma camada de spans posicionados
+        const tl = doc.querySelector('.textLayer')
+        return tl?.textContent.trim() ? [tl] : []
     }
 
     #startIndex(doc) {
@@ -40,11 +44,17 @@ export class ReadAloud extends EventTarget {
     }
 
     async start() {
-        const contents = this.reader.view.renderer.getContents()[0]
-        if (!contents?.doc) return
-        this.doc = contents.doc
-        this.blocks = this.#collect(this.doc)
-        this.i = this.#startIndex(this.doc)
+        const doc = this.reader.isFixed
+            ? this.reader.visibleFixedDocs()[0]
+            : this.reader.view.renderer.getContents()[0]?.doc
+        if (!doc) return
+        this.doc = doc
+        this.blocks = this.#collect(doc)
+        this.i = this.reader.isFixed ? 0 : this.#startIndex(doc)
+        if (!this.blocks.length) {
+            this.dispatchEvent(new CustomEvent('error', { detail: 'Esta página não tem texto para ler (pode ser uma imagem ou PDF escaneado).' }))
+            return
+        }
         this.playing = true
         this.paused = false
         this.failures = 0
@@ -72,7 +82,7 @@ export class ReadAloud extends EventTarget {
             el.classList.add('ll-tts')
             const r = this.doc.createRange()
             r.selectNodeContents(el)
-            this.reader.view.renderer.scrollToAnchor?.(r)
+            if (!this.reader.isFixed) this.reader.view.renderer.scrollToAnchor?.(r)
         }
     }
 
@@ -87,7 +97,7 @@ export class ReadAloud extends EventTarget {
         }
         const el = this.blocks[this.i]
         this.#mark(el)
-        this.chunks = this.#segments(el.textContent.replace(/\s+/g, ' ').trim())
+        this.chunks = this.#segments((el.innerText || el.textContent).replace(/\s+/g, ' ').trim())
         this.c = 0
         this.#speakChunk()
     }

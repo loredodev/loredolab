@@ -62,6 +62,30 @@ export class Settings {
                             },
                         }, 'Testar conexão'),
                         h('button.link', { onclick: () => window.api.app.openExternal('https://console.anthropic.com/settings/keys') }, 'Obter chave ↗'))),
+                card('perf', 'Desempenho', 'sparkles',
+                    field('Aceleração de vídeo (GPU)', h('select.input', {
+                        onchange: async e => {
+                            save('gpuMode', e.target.value)
+                            store.flushAll()
+                            if (await confirmDialog('Reiniciar', 'Essa mudança vale depois de reiniciar o aplicativo. Reiniciar agora?', { okLabel: 'Reiniciar' })) {
+                                setTimeout(() => window.api.app.relaunch(), 600)
+                            }
+                        },
+                    }, [['auto', 'Forçar GPU (recomendado)'], ['padrao', 'Padrão do sistema'], ['desligada', 'Desligada (use se a tela piscar ou travar)']]
+                        .map(([v, l]) => h('option', { value: v, selected: s.gpuMode === v }, l))),
+                    'Se o app estiver lento, teste as opções: “Forçar GPU” costuma resolver lentidão em placas de vídeo bloqueadas pelo Chromium.'),
+                    h('label.switch', h('input', {
+                        type: 'checkbox', checked: !s.animated && !s.paperTexture && !s.bookFrame,
+                        onchange: e => {
+                            const leve = e.target.checked
+                            Object.assign(s, { animated: !leve, paperTexture: !leve, bookFrame: !leve, pageSound: false })
+                            store.save('settings')
+                            toast(leve ? 'Modo leve ligado: sem animações, textura e moldura' : 'Efeitos visuais religados')
+                        },
+                    }), h('span.track'), h('span', 'Modo leve (desliga animações e efeitos visuais)')),
+                    h('div.row.wrap',
+                        h('button.btn', { onclick: () => this.#diagnose() }, icon('chart', 16), ' Diagnóstico'),
+                        h('span#diag.small.muted'))),
                 card('data', 'Dados e backup', 'cloud',
                     h('p.small', 'O backup inclui biblioteca, anotações, cadernos, flashcards, vocabulário, estatísticas e preferências (não inclui os arquivos dos livros nem a chave da API).'),
                     h('div.row.wrap',
@@ -76,6 +100,25 @@ export class Settings {
         window.api.app.info().then(i => { const el = $('#app-version'); if (el) el.textContent = ` versão ${i.version}` })
         if (focus) setTimeout(() => $(`#set-${focus}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
         if (!voices.length) window.speechSynthesis?.addEventListener('voiceschanged', () => this.root.classList.contains('active') && this.render(), { once: true })
+    }
+
+    async #diagnose() {
+        const out = $('#diag')
+        out.textContent = 'Medindo…'
+        const fps = await new Promise(res => {
+            let n = 0
+            const t0 = performance.now()
+            const f = () => { n++; performance.now() - t0 < 1500 ? requestAnimationFrame(f) : res(Math.round(n / 1.5)) }
+            requestAnimationFrame(f)
+        })
+        const g = await window.api.app.gpuStatus()
+        const comp = g.status?.gpu_compositing ?? '?'
+        const gpuOk = comp.startsWith('enabled')
+        const dev = g.info?.gpuDevice?.find(d => d.active) ?? g.info?.gpuDevice?.[0]
+        out.textContent = `${fps} quadros/s · GPU ${gpuOk ? 'ativa ✔' : 'DESATIVADA (renderização por software)'} · modo: ${g.mode}` +
+            (dev ? ` · placa: ${dev.vendorString || dev.vendorId} ${dev.deviceString || dev.deviceId}` : '') +
+            ` · tela ${screen.width}×${screen.height} @${devicePixelRatio}x`
+        if (!gpuOk) toast('A GPU está desativada — por isso o app fica lento. Escolha “Forçar GPU” e reinicie.', { type: 'error', timeout: 9000 })
     }
 
     async #backup() {

@@ -5,7 +5,7 @@ import { Overlayer } from '../foliate/overlayer.js'
 import * as CFI from '../foliate/epubcfi.js'
 import { openBook, FORMAT_LABEL } from './formats.js'
 import { store } from './store.js'
-import { THEMES, FONTS, getTheme, bookCSS } from './themes.js'
+import { THEMES, FONTS, getTheme, bookCSS, paperTextureURL } from './themes.js'
 import { ReadAloud, speak } from './tts.js'
 import { aiChat, aiReady, aiFlashcards, QUICK_PROMPTS, renderMarkdown } from './ai.js'
 import {
@@ -95,6 +95,9 @@ export class Reader {
                     h('div.book#book',
                         h('div.book-edges'),
                         h('div.book-host#book-host'),
+                        h('div.paper-tex'),
+                        h('div.light-dim'),
+                        h('div.light-warm'),
                         h('div.fold')),
                     h('button.nav-zone.right', { title: 'Próxima página', onclick: () => this.next() }, icon('next', 28)),
                     h('div.ruler#ruler'),
@@ -150,6 +153,8 @@ export class Reader {
         $('#book-host', this.root).append(view)
         await view.open(book)
         this.isFixed = view.isFixedLayout
+        this.fixedDocs = new Map()
+        this.fixedHits = new Map()
         this.language = formatLang(book.metadata?.language) || ''
         this.root.classList.toggle('fixed-layout', this.isFixed)
 
@@ -228,11 +233,11 @@ export class Reader {
         this.root.style.setProperty('--page-edge', t.page)
         this.root.classList.toggle('dark-page', !!t.dark)
         bookEl.classList.toggle('framed', s.bookFrame && !this.isFixed && s.layout !== 'scrolled')
-        bookEl.classList.toggle('textured', s.paperTexture && !!t.texture)
-        const warm = s.warmth / 100
-        const filters = [`brightness(${s.brightness / 100})`]
-        if (warm > 0) filters.push(`sepia(${warm * 0.55})`, `saturate(${1 + warm * 0.3})`)
-        $('#book-host', this.root).style.filter = filters.join(' ')
+        bookEl.classList.toggle('textured', s.paperTexture && !!t.texture && !this.isFixed)
+        if (s.paperTexture) this.root.style.setProperty('--paper', `url(${paperTextureURL()})`)
+        // brilho e luz noturna como camadas translúcidas (sem filtros CSS, que pesam muito)
+        $('.light-dim', bookEl).style.opacity = String(Math.max(0, Math.min(0.6, (100 - s.brightness) / 100)))
+        $('.light-warm', bookEl).style.opacity = String(s.warmth / 100 * 0.32)
         if (!view?.renderer) return
         if (this.isFixed) {
             const invert = t.dark && s.pdfDarkInvert
@@ -249,8 +254,7 @@ export class Reader {
         r.setAttribute('gap', `${s.gap}%`)
         r.toggleAttribute('animated', !!s.animated)
         r.setStyles?.(bookCSS(s))
-        view.style.setProperty('--overlayer-highlight-opacity', t.dark ? '.38' : '.42')
-        view.style.setProperty('--overlayer-highlight-blend-mode', t.dark ? 'screen' : 'multiply')
+        view.style.setProperty('--overlayer-highlight-opacity', t.dark ? '.34' : '.4')
         const cols = s.layout === 'single' || s.layout === 'scrolled' ? 1 : 2
         bookEl.style.maxWidth = s.layout === 'scrolled' ? `${s.pageWidth + 160}px`
             : `${cols * s.pageWidth + (cols === 2 ? 2 : 1) * (s.pageWidth * s.gap / 50) + 120}px`
@@ -274,15 +278,17 @@ export class Reader {
     // Eventos do livro
     // ======================================================================
     #onLoad({ doc, index }) {
+        if (this.isFixed) this.#setupFixedDoc(doc, index)
         doc.addEventListener('keydown', e => this.#onKey(e))
         doc.addEventListener('pointerup', e => setTimeout(() => this.#checkSelection(doc, index, e), 10))
         doc.addEventListener('pointerdown', () => this.#hideSelPop())
         doc.addEventListener('wheel', e => this.#onWheel(e), { passive: true })
         doc.addEventListener('mousemove', e => {
-            this.markActivity()
+            this.lastActivity = Date.now()
+            if (!this.rulerOn) return
             const fr = doc.defaultView.frameElement?.getBoundingClientRect()
             if (fr) this.#moveRuler(fr.top + e.clientY)
-        })
+        }, { passive: true })
         doc.addEventListener('click', e => this.#onDocClick(e, doc))
         doc.addEventListener('dblclick', () => setTimeout(() => this.#checkSelection(doc, index), 20))
         doc.addEventListener('contextmenu', e => {
@@ -300,6 +306,17 @@ export class Reader {
         if (e.target.closest?.('a[href]')) return
         const sel = doc.getSelection()
         if (sel && !sel.isCollapsed) return
+        if (this.isFixed) {
+            for (const [, hits] of this.fixedHits) for (const hit of hits) {
+                if (hit.range.startContainer.ownerDocument !== doc) continue
+                if (hit.rects.some(r => e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom)) {
+                    this.annotationClickAt = Date.now()
+                    this.selection = null
+                    this.#showSelPop(doc, hit.range, hit.a)
+                    return
+                }
+            }
+        }
         if (Date.now() - (this.annotationClickAt ?? 0) < 300) return
         // clique nas laterais da página vira a página
         const fr = doc.defaultView.frameElement?.getBoundingClientRect()
@@ -408,6 +425,15 @@ export class Reader {
     async nextSectionForTTS() {
         const r = this.view?.renderer
         if (!r) return false
+        if (this.isFixed) {
+            const before = this.view.lastLocation?.section?.current
+            await this.view.next()
+            await new Promise(res => setTimeout(res, 1200))
+            const vis = this.#visibleFixed()
+            if (!vis.length || vis[0][0] === before) return false
+            this.tts.continueInNewSection(vis[0][1])
+            return true
+        }
         const before = this.view.lastLocation?.section?.current
         this.ttsWaitingSection = true
         await r.nextSection?.()
@@ -572,7 +598,9 @@ export class Reader {
         const sel = this.selection
         if (!sel) return
         const cfi = this.view.getCFI(sel.index, sel.range)
-        const { tocItem } = this.view.getProgressOf(sel.index, sel.range)
+        let tocItem
+        try { tocItem = this.view.getProgressOf(sel.index, sel.range)?.tocItem } catch {}
+        tocItem ??= this.view.lastLocation?.tocItem
         const a = {
             id: uid(), value: cfi, index: sel.index,
             text: sel.text, note: '',
@@ -587,8 +615,8 @@ export class Reader {
         store.save('settings')
         this.data.annotations.push(a)
         this.#saveData()
-        await this.view.addAnnotation(a)
         this.#clearSelection()
+        await this.#drawOne(a)
         if (withNote) this.editNote(a)
         if (this.panelName === 'notes') this.renderPanel()
         return a
@@ -599,19 +627,20 @@ export class Reader {
         if (patch.color) this.settings.lastColor = patch.color
         if (patch.style) this.settings.lastStyle = patch.style
         this.#saveData()
-        await this.view.addAnnotation(a)
         this.#hideSelPop()
+        await this.#drawOne(a)
         if (this.panelName === 'notes') this.renderPanel()
     }
 
     async deleteAnnotation(a) {
         this.data.annotations = this.data.annotations.filter(x => x.id !== a.id)
         this.#saveData()
-        await this.view.deleteAnnotation(a)
         this.#hideSelPop()
+        if (this.isFixed) this.#redrawFixed(a.index)
+        else await this.view.deleteAnnotation(a)
         if (this.panelName === 'notes') this.renderPanel()
         toast('Anotação apagada', {
-            action: { label: 'Desfazer', run: async () => { this.data.annotations.push(a); this.#saveData(); await this.view.addAnnotation(a); if (this.panelName === 'notes') this.renderPanel() } },
+            action: { label: 'Desfazer', run: async () => { this.data.annotations.push(a); this.#saveData(); await this.#drawOne(a); if (this.panelName === 'notes') this.renderPanel() } },
         })
     }
 
@@ -623,6 +652,76 @@ export class Reader {
         })
         if (note == null) return
         await this.updateAnnotation(a, { note: note.trim() })
+    }
+
+    async #drawOne(a) {
+        if (this.isFixed) this.#redrawFixed(a.index)
+        else await this.view.addAnnotation(a)
+    }
+
+    // ----- destaques em PDF / layout fixo (o motor não tem camada própria para isso) -----
+    #visibleFixed() {
+        return [...this.fixedDocs.entries()].filter(([, doc]) => {
+            const fr = doc.defaultView?.frameElement
+            if (!fr || !fr.isConnected) return false
+            const r = fr.getBoundingClientRect()
+            return r.width > 0 && r.right > 0 && r.left < innerWidth
+        }).sort((x, y) => x[0] - y[0])
+    }
+
+    visibleFixedDocs() { return this.#visibleFixed().map(([, doc]) => doc) }
+
+    #redrawFixed(index) {
+        for (const [i, doc] of this.fixedDocs) if (index == null || i === index) this.#drawFixedLayer(doc, i)
+    }
+
+    #drawFixedLayer(doc, index) {
+        if (!doc.documentElement) return
+        doc.getElementById('ll-hl')?.remove()
+        const html = doc.documentElement
+        const hr = html.getBoundingClientRect()
+        const scale = html.offsetWidth ? hr.width / html.offsetWidth : 1
+        const layer = doc.createElement('div')
+        layer.id = 'll-hl'
+        Object.assign(layer.style, { position: 'absolute', left: '0', top: '0', width: '0', height: '0', pointerEvents: 'none', zIndex: '1' })
+        const hits = []
+        for (const a of this.data?.annotations ?? []) {
+            if ((a.index ?? this.#indexOf(a.value)) !== index) continue
+            let range
+            try { range = this.view.resolveCFI(a.value).anchor(doc) } catch { continue }
+            if (typeof range?.getClientRects !== 'function' || !range.startContainer) continue // Range vem de outro iframe (instanceof não funciona)
+            const rects = Array.from(range.getClientRects()).filter(r => r.width > 0.5 && r.height > 0.5)
+            hits.push({ a, range, rects })
+            const color = COLORS[a.color]?.hex ?? COLORS.amarelo.hex
+            const t = 2 / scale
+            for (const r of rects) {
+                const el = doc.createElement('div')
+                const x = (r.left - hr.left) / scale, y = (r.top - hr.top) / scale
+                const w = r.width / scale, hgt = r.height / scale
+                const st = { position: 'absolute', left: `${x}px`, width: `${w}px` }
+                if (a.style === 'underline') Object.assign(st, { top: `${y + hgt - t}px`, height: `${t}px`, background: color })
+                else if (a.style === 'squiggly') Object.assign(st, { top: `${y + hgt - t * 2}px`, height: `${t * 2}px`, borderBottom: `${t}px dotted ${color}` })
+                else if (a.style === 'strikethrough') Object.assign(st, { top: `${y + hgt / 2 - t / 2}px`, height: `${t}px`, background: color })
+                else Object.assign(st, { top: `${y}px`, height: `${hgt}px`, background: color, opacity: '.4', borderRadius: `${t}px` })
+                Object.assign(el.style, st)
+                layer.append(el)
+            }
+        }
+        this.fixedHits.set(index, hits)
+        html.append(layer)
+    }
+
+    #setupFixedDoc(doc, index) {
+        for (const [i, d] of this.fixedDocs) if (!d.defaultView?.frameElement?.isConnected) {
+            this.fixedDocs.delete(i)
+            this.fixedHits.delete(i)
+        }
+        this.fixedDocs.set(index, doc)
+        // o PDF desenha a camada de texto depois de carregar (e de novo ao dar zoom)
+        const redraw = debounce(() => this.#drawFixedLayer(doc, index), 150)
+        const tl = doc.querySelector('.textLayer')
+        if (tl) new MutationObserver(redraw).observe(tl, { childList: true })
+        setTimeout(redraw, 700)
     }
 
     #drawAnnotationsFor(index) {
@@ -650,6 +749,10 @@ export class Reader {
     // ----- marcadores -----
     #currentBookmark() {
         const loc = this.view?.lastLocation
+        if (this.isFixed) {
+            const idx = loc?.section?.current
+            return idx == null ? null : this.data.bookmarks.find(b => b.index === idx)
+        }
         if (!loc?.range) return null
         const start = this.view.getCFI(loc.section?.current ?? 0, collapsed(loc.range, false))
         const end = this.view.getCFI(loc.section?.current ?? 0, collapsed(loc.range, true))
@@ -670,9 +773,11 @@ export class Reader {
             toast('Marcador removido')
         } else {
             const loc = this.view.lastLocation
-            const excerpt = loc.range?.toString().replace(/\s+/g, ' ').trim().slice(0, 140) ?? ''
+            const idx = loc.section?.current ?? 0
+            const excerpt = this.visibleText().slice(0, 140)
             this.data.bookmarks.push({
-                id: uid(), value: this.view.getCFI(loc.section?.current ?? 0, collapsed(loc.range, false)),
+                id: uid(), index: idx,
+                value: this.isFixed || !loc.range ? this.view.getCFI(idx) : this.view.getCFI(idx, collapsed(loc.range, false)),
                 chapter: loc.tocItem?.label ?? '', excerpt, fraction: loc.fraction,
                 page: (this.isFixed ? loc.section?.current : loc.location?.current) + 1, created: Date.now(),
             })
@@ -681,6 +786,14 @@ export class Reader {
         this.#saveData()
         this.#updateBookmarkBtn()
         if (this.panelName === 'notes') this.renderPanel()
+    }
+
+    // texto que está na tela agora
+    visibleText() {
+        if (this.isFixed) return this.#visibleFixed()
+            .map(([, doc]) => (doc.querySelector('.textLayer') ?? doc.body)?.innerText ?? '').join('\n')
+            .replace(/\s+/g, ' ').trim()
+        return this.view?.lastLocation?.range?.toString().replace(/\s+/g, ' ').trim() ?? ''
     }
 
     // ======================================================================
@@ -805,6 +918,14 @@ export class Reader {
         fill(out, status, list)
         let count = 0
         const token = this.searchToken = {}
+        if (this.isFixed) {
+            if (!this.book.pdf) { status.textContent = 'Busca de texto não disponível em quadrinhos.'; return }
+            count = await this.#searchPDF(query, searchOpts, token, status, list)
+            if (count == null) return
+            status.textContent = count ? `${count} resultado${count > 1 ? 's' : ''}` : 'Nada encontrado (PDFs escaneados não têm texto pesquisável).'
+            this.lastResults = [status, list]
+            return
+        }
         for await (const r of this.view.search({ query, ...searchOpts, drawOptions: { color: '#e09a3c', width: 2, radius: 3 } })) {
             if (token !== this.searchToken) return
             if (r === 'done') break
@@ -819,6 +940,45 @@ export class Reader {
         }
         status.textContent = count ? `${count} resultado${count > 1 ? 's' : ''}` : 'Nada encontrado.'
         this.lastResults = [status, list]
+    }
+
+    async #searchPDF(query, opts, token, status, list) {
+        const pdf = this.book.pdf
+        const fold = t => {
+            let x = opts.matchCase ? t : t.toLocaleLowerCase()
+            if (!opts.matchDiacritics) x = x.normalize('NFD').replace(/\p{M}/gu, '')
+            return x
+        }
+        const q = fold(query)
+        const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const re = new RegExp(opts.matchWholeWords ? `(?<![\\p{L}\\p{N}])${esc}(?![\\p{L}\\p{N}])` : esc, 'gu')
+        let count = 0
+        for (let i = 0; i < pdf.numPages; i++) {
+            if (token !== this.searchToken) return null
+            if (i % 5 === 0) status.textContent = `Buscando… página ${i + 1} de ${pdf.numPages}`
+            let text
+            try {
+                const tc = await (await pdf.getPage(i + 1)).getTextContent()
+                text = tc.items.map(it => it.str + (it.hasEOL ? ' ' : '')).join('').replace(/\s+/g, ' ')
+            } catch { continue }
+            // a busca é feita no texto "dobrado" (sem acentos), que tem o mesmo tamanho na maioria dos casos
+            const folded = fold(text)
+            const same = folded.length === text.length
+            let m, n = 0
+            re.lastIndex = 0
+            while ((m = re.exec(folded)) && n < 30) {
+                n++; count++
+                const a = same ? m.index : Math.round(m.index * text.length / folded.length)
+                const len = same ? m[0].length : query.length
+                const pre = text.slice(Math.max(0, a - 50), a)
+                const post = text.slice(a + len, a + len + 60)
+                if (n === 1) list.append(h('div.sr-chapter', `Página ${i + 1}`))
+                const page = i
+                list.append(h('button.sr-item', { onclick: () => this.view.goTo(page) },
+                    pre ? `…${pre}` : '', h('mark', text.slice(a, a + len)), post ? `${post}…` : ''))
+            }
+        }
+        return count
     }
 
     // ----- anotações -----
@@ -902,7 +1062,7 @@ export class Reader {
                 h('button.btn', { onclick: () => insert(`\n## ${this.chapterLabel || 'Capítulo'}\n\n`) }, '+ Título do capítulo'),
                 h('button.btn', {
                     onclick: () => {
-                        const t = this.selection?.text ?? this.view?.lastLocation?.range?.toString().trim().slice(0, 300)
+                        const t = this.selection?.text ?? this.visibleText().slice(0, 300)
                         if (t) insert(`\n> ${t.replace(/\s+/g, ' ')}\n\n`)
                     },
                 }, '+ Citação'),
@@ -960,7 +1120,7 @@ export class Reader {
                         iconBtn('zoomOut', 'Diminuir', () => this.#zoom(1 / 1.15)),
                         iconBtn('zoomIn', 'Aumentar', () => this.#zoom(1.15)))),
                 section('Conforto visual',
-                    slider('brightness', 'Brilho', 40, 120, 1, '%'),
+                    slider('brightness', 'Brilho', 40, 100, 1, '%'),
                     slider('warmth', 'Luz noturna (tom quente)', 0, 100, 1, '%')),
                 h('p.muted.small', 'PDFs e quadrinhos têm layout fixo: as opções de fonte e espaçamento valem para EPUB, MOBI, AZW3, FB2, DOCX, TXT e outros formatos de texto.'))
             return
@@ -1005,7 +1165,7 @@ export class Reader {
                 toggle('animated', 'Animação ao virar página'),
                 toggle('pageSound', 'Som de folha ao virar página')),
             section('Conforto visual',
-                slider('brightness', 'Brilho', 40, 120, 1, '%'),
+                slider('brightness', 'Brilho', 40, 100, 1, '%'),
                 slider('warmth', 'Luz noturna (tom quente)', 0, 100, 1, '%')),
             h('div.row', h('button.btn', {
                 onclick: async () => {
@@ -1098,7 +1258,7 @@ export class Reader {
                 h('button.btn', { onclick: wiki }, icon('globe', 16), ' Wikipédia'),
                 h('button.btn', {
                     onclick: () => {
-                        const t = this.view?.lastLocation?.range?.toString().replace(/\s+/g, ' ').trim()
+                        const t = this.visibleText()
                         if (t) { src.value = t.slice(0, 4800); run() }
                     },
                 }, icon('bookOpen', 16), ' Traduzir página atual')),
@@ -1118,7 +1278,21 @@ export class Reader {
     }
 
     // ----- assistente IA -----
-    #chapterText() {
+    async #chapterText() {
+        if (this.isFixed && this.book?.pdf) {
+            // PDF: texto das páginas ao redor da atual
+            const pdf = this.book.pdf
+            const cur = this.view.lastLocation?.section?.current ?? 0
+            const parts = []
+            for (let i = Math.max(0, cur - 3); i < Math.min(pdf.numPages, cur + 12); i++) {
+                try {
+                    const tc = await (await pdf.getPage(i + 1)).getTextContent()
+                    parts.push(`[Página ${i + 1}]\n` + tc.items.map(it => it.str + (it.hasEOL ? '\n' : '')).join(''))
+                } catch {}
+            }
+            return parts.join('\n\n')
+        }
+        if (this.isFixed) return this.visibleText()
         const doc = this.view?.renderer.getContents()[0]?.doc
         return doc?.body?.innerText?.replace(/\n{3,}/g, '\n\n') ?? ''
     }
@@ -1182,7 +1356,7 @@ export class Reader {
         this.aiBusy = true
         const { promise } = aiChat({
             book: { title: this.rec.title, author: this.rec.author },
-            chapterLabel: this.chapterLabel, chapterText: this.#chapterText(), history,
+            chapterLabel: this.chapterLabel, chapterText: await this.#chapterText(), history,
         }, delta => {
             reply.content += delta
             const el = $('#chat-log', this.root)?.lastElementChild?.querySelector('.md')
@@ -1202,7 +1376,7 @@ export class Reader {
         toast('Gerando flashcards do capítulo…', { timeout: 5000 })
         const r = await aiFlashcards({
             book: { title: this.rec.title, author: this.rec.author },
-            chapterLabel: this.chapterLabel, chapterText: this.#chapterText(),
+            chapterLabel: this.chapterLabel, chapterText: await this.#chapterText(),
         })
         this.aiBusy = false
         if (r.error) return toast(r.error, { type: 'error', timeout: 6000 })

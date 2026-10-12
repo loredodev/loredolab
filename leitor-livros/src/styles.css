@@ -200,7 +200,7 @@ kbd { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px s
 .toast.success { border-color: var(--success); }
 .toast.out { opacity: 0; transform: translateY(8px); }
 @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } }
-.modal-overlay { position: fixed; inset: 0; z-index: 900; background: rgba(10, 7, 5, .55); display: grid; place-items: center; animation: fade .15s; backdrop-filter: blur(2px); }
+.modal-overlay { position: fixed; inset: 0; z-index: 900; background: rgba(10, 7, 5, .55); display: grid; place-items: center; animation: fade .15s; }
 @keyframes fade { from { opacity: 0; } }
 .modal {
     width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 60px); display: flex; flex-direction: column;
@@ -272,7 +272,7 @@ kbd { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px s
 }
 .book-card:hover .cover, .book-card:focus-visible .cover { transform: translateY(-6px) rotate(-.6deg); box-shadow: 8px 14px 26px rgba(0, 0, 0, .5); }
 .cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.badge { position: absolute; top: 8px; right: 8px; z-index: 3; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(15, 11, 8, .78); color: #f3e8d6; backdrop-filter: blur(4px); }
+.badge { position: absolute; top: 8px; right: 8px; z-index: 3; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(15, 11, 8, .82); color: #f3e8d6; }
 .badge.done { background: var(--success); color: #0e1a0f; }
 .badge.new { background: var(--accent); color: var(--accent-ink); }
 .fav { position: absolute; top: 6px; left: 14px; z-index: 3; color: #ff6b81; font-size: 16px; text-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
@@ -349,17 +349,13 @@ kbd { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px s
 #reader-view.fixed-layout .book { background: transparent; max-width: none !important; }
 .book.framed {
     border-radius: 4px 6px 6px 4px;
-    box-shadow:
-        0 1px 1px rgba(0, 0, 0, .15),
-        0 18px 40px -8px rgba(0, 0, 0, .55),
-        0 4px 14px rgba(0, 0, 0, .3);
+    box-shadow: 0 14px 34px -6px rgba(0, 0, 0, .55);
 }
 /* bordas de folhas empilhadas (espessura do livro) */
 .book.framed .book-edges { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
 .book.framed .book-edges::before, .book.framed .book-edges::after {
     content: ''; position: absolute; top: 3px; bottom: 3px; width: 9px;
     background: repeating-linear-gradient(0deg, var(--page-edge) 0 1px, color-mix(in srgb, var(--page-edge) 78%, #000) 1px 2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
 }
 .book.framed .book-edges::before { left: -8px; border-radius: 3px 0 0 3px; }
 .book.framed .book-edges::after { right: -8px; border-radius: 0 3px 3px 0; }
@@ -379,6 +375,11 @@ kbd { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px s
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 22px; z-index: 5; pointer-events: none;
     background: linear-gradient(90deg, rgba(0, 0, 0, .14), transparent);
 }
+.paper-tex, .light-dim, .light-warm { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; z-index: 4; }
+.paper-tex { display: none; background-image: var(--paper); background-size: 160px 160px; }
+.book.textured .paper-tex { display: block; }
+.light-dim { background: #000; opacity: 0; }
+.light-warm { background: #ff9a2e; opacity: 0; }
 .nav-zone {
     position: absolute; top: 0; bottom: 0; width: 56px; z-index: 6; border: 0; background: transparent;
     color: var(--text-2); opacity: 0; transition: opacity .2s; display: grid; place-items: center;
@@ -411,7 +412,6 @@ kbd { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px s
 #reader-view.focus-mode .reader-top { margin-top: -52px; opacity: 0; }
 #reader-view.focus-mode .reader-bottom { margin-bottom: -50px; opacity: 0; }
 #reader-view.focus-mode::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 14px; z-index: 30; }
-#reader-view.focus-mode:has(.reader-top:hover) .reader-top,
 #reader-view.focus-mode .reader-top:hover { margin-top: 0; opacity: 1; }
 #reader-view.focus-mode .stage { padding-top: 26px; padding-bottom: 26px; }
 #reader-view.focus-mode .reader-top { position: absolute; left: 0; right: 0; top: 0; }

@@ -43,6 +43,8 @@ contextBridge.exposeInMainWorld('api', {
         openExternal: url => invoke('app:openExternal', url),
         info: () => invoke('app:info'),
         openDataFolder: () => invoke('app:openDataFolder'),
+        gpuStatus: () => invoke('app:gpuStatus'),
+        relaunch: () => invoke('app:relaunch'),
         onFullscreen: cb => ipcRenderer.on('fullscreen', (_, v) => cb(v)),
         onOpenFiles: cb => ipcRenderer.on('open-files', (_, list) => cb(list)),
     },

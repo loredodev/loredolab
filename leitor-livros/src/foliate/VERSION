@@ -1,3 +1,4 @@
 78914aef4466eb960965702401634c2cb348e9b1
 Modificação local: paginator.js setStylesImportant ignora elemento nulo.
 Modificação local: paginator.js View.render ignora documento sem body.
+Modificação local: pdf.js expõe book.pdf para a busca.

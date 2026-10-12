@@ -150,6 +150,18 @@ class App {
     }
 }
 
+// mostra erros inesperados em vez de falhar em silêncio
+let lastErr = 0
+const reportError = msg => {
+    if (/ResizeObserver loop/.test(String(msg))) return // aviso inofensivo do navegador
+    console.error(msg)
+    if (Date.now() - lastErr < 4000) return
+    lastErr = Date.now()
+    toast(`Algo deu errado: ${String(msg).slice(0, 160)}`, { type: 'error', timeout: 7000 })
+}
+window.addEventListener('error', e => reportError(e.message))
+window.addEventListener('unhandledrejection', e => reportError(e.reason?.message ?? e.reason))
+
 const app = new App()
 window.app = app
 app.init().catch(e => {

@@ -75,6 +75,13 @@ npm run dist:linux   # AppImage para Linux
 npm run dist:mac     # DMG para macOS (precisa rodar num Mac)
 ```
 
+## Se estiver lento
+
+Em **Configurações → Desempenho**:
+- clique em **Diagnóstico** — ele mostra os quadros por segundo e se a placa de vídeo (GPU) está ativa;
+- em **Aceleração de vídeo**, deixe **“Forçar GPU”** (padrão). Se a tela piscar ou travar, teste “Padrão do sistema” ou “Desligada” (o app reinicia);
+- ligue o **Modo leve** para desligar animações, textura de papel e moldura.
+
 ## Assistente de IA
 
 Opcional. Em **Configurações → Assistente de IA**, cole uma chave da API da Anthropic (crie em <https://console.anthropic.com/settings/keys>). A chave fica salva apenas no seu computador e o uso é cobrado pela Anthropic. O assistente lê o capítulo em que você está para responder.

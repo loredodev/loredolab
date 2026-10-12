@@ -127,6 +127,7 @@ export const makePDF = async file => {
     }).promise
 
     const book = { rendition: { layout: 'pre-paginated' } }
+    book.pdf = pdf // Leitor Loredo: usado na busca de texto em PDFs
 
     const { metadata, info } = await pdf.getMetadata() ?? {}
     // TODO: for better results, parse `metadata.getRaw()`

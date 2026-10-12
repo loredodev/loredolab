@@ -83,10 +83,24 @@ export const fontStack = name => {
     return `"${f.name}", Georgia, serif`
 }
 
-// textura de papel (ruído SVG)
-const PAPER = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
-
-export const paperTexture = PAPER
+// textura de papel: um pequeno PNG de ruído gerado uma vez e aplicado como camada
+// estática por cima da página (bem mais leve que desenhar a textura no documento inteiro)
+let paperURL
+export const paperTextureURL = () => {
+    if (paperURL) return paperURL
+    const size = 160
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    const ctx = c.getContext('2d')
+    const img = ctx.createImageData(size, size)
+    for (let i = 0; i < img.data.length; i += 4) {
+        const v = Math.random()
+        img.data[i] = 115; img.data[i + 1] = 92; img.data[i + 2] = 56
+        img.data[i + 3] = v < 0.5 ? 0 : Math.round((v - 0.5) * 34)
+    }
+    ctx.putImageData(img, 0, 0)
+    return paperURL = c.toDataURL('image/png')
+}
 
 export const bookCSS = (s, { fixed = false } = {}) => {
     const t = getTheme(s)
@@ -99,7 +113,7 @@ ${fontFaces(font)}
 @namespace epub "http://www.idpf.org/2007/ops";
 html {
     color-scheme: ${t.dark ? 'dark' : 'light'};
-    background: ${t.bg}${s.paperTexture && t.texture ? ` ${PAPER}` : ''} !important;
+    background: ${t.bg} !important;
     color: ${t.fg} !important;
     font-size: ${s.fontSize}px !important;
     -webkit-font-smoothing: antialiased;

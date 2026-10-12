@@ -18,6 +18,23 @@ const SUPPORTED = ['epub', 'pdf', 'mobi', 'azw', 'azw3', 'kf8', 'prc', 'fb2', 'f
 if (process.env.LEITOR_USER_DATA) app.setPath('userData', process.env.LEITOR_USER_DATA)
 
 const userDir = () => app.getPath('userData')
+
+// Aceleração de vídeo (configurável em Configurações → Desempenho; vale após reiniciar)
+const gpuMode = (() => {
+    try {
+        return JSON.parse(fs.readFileSync(path.join(app.getPath('userData'), 'data', 'settings.json'), 'utf8')).gpuMode ?? 'auto'
+    } catch {
+        return 'auto'
+    }
+})()
+if (gpuMode === 'desligada') app.disableHardwareAcceleration()
+else if (gpuMode === 'auto') {
+    // muitos drivers de vídeo ficam na "lista de bloqueio" do Chromium e o app cai para
+    // renderização por software (lenta). Aqui usamos a GPU mesmo assim.
+    app.commandLine.appendSwitch('ignore-gpu-blocklist')
+    app.commandLine.appendSwitch('enable-gpu-rasterization')
+    app.commandLine.appendSwitch('enable-zero-copy')
+}
 const booksDir = () => path.join(userDir(), 'books')
 const coversDir = () => path.join(userDir(), 'covers')
 const dataDir = () => path.join(userDir(), 'data')
@@ -237,6 +254,12 @@ ipcMain.handle('app:info', () => ({
     version: app.getVersion(), dataPath: userDir(), platform: process.platform,
 }))
 ipcMain.handle('app:openDataFolder', () => shell.openPath(userDir()))
+ipcMain.handle('app:gpuStatus', async () => ({
+    mode: gpuMode,
+    status: app.getGPUFeatureStatus(),
+    info: await app.getGPUInfo('basic').catch(() => null),
+}))
+ipcMain.handle('app:relaunch', () => { app.relaunch(); app.exit(0) })
 
 // ---------- tradução / dicionário / wikipedia ----------
 const getJSON = async (url, opts) => {

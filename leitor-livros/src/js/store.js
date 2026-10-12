@@ -23,6 +23,7 @@ export const DEFAULT_SETTINGS = {
     animated: true,
     pageSound: false,
     paperTexture: true,
+    gpuMode: 'auto', // auto | padrao | desligada
     bookFrame: true,
     showHeaderFooter: true,
     brightness: 100,

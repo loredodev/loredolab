@@ -1,7 +1,7 @@
 {
   "name": "leitor-loredo",
   "productName": "Leitor Loredo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Leitor de livros completo para PC: EPUB, PDF, MOBI, AZW3, FB2, CBZ/CBR, DOCX, ODT, RTF, TXT, Markdown e HTML, com anotações, tradução, flashcards e estatísticas.",
   "main": "main.js",
   "author": "LoredoLab",
